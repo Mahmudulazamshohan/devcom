@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+    <style>
+     .shohan-caroasel{   
+         display: block;
+         width:100%;
+         background: #eee;
+         position: relative;
+     }
+     .shohan-caroasel .shohan-stage-router{
+        position: relative;
+        overflow: hidden;
+     }
+     .shohan-stage-router .shohan-stage{
+         width: 4500px;
+         transition: all 1s ease  0s;
+         box-sizing: border-box;
+         padding: 10px;
+     }
+     .shohan-stage .shohan-item{
+        position: relative;
+        min-height:100%;
+        height: 100px;
+        float: left;
+        width: 157px;
+        background: green;
+        margin-bottom: 4px;
+        margin-right: 4px;
+        border-radius: 4px;
+     }
+     .active{
+        display: block;
+     }
+     .clone{
+        display: block;
+     }
+    </style>
+</head>
+<body>
+    <div class="shohan-caroasel">
+        <div class="shohan-stage-router">
+            <div class="shohan-stage">
+                <div class="shohan-item">1</div>
+                <div class="shohan-item">2</div>
+                <div class="shohan-item">3</div>
+                <div class="shohan-item">4</div>
+                <div class="shohan-item">5</div>
+                <div class="shohan-item">6</div>
+                <div class="shohan-item">7</div>
+                <div class="shohan-item">8</div>
+                <div class="shohan-item">9</div>
+                <div class="shohan-item">10</div>
+            </div>
+            <div class="shohan-controls">
+                <button id="prev"><-</button>
+                <button id="next">-></button>
+            </div>
+        </div>
+
+    </div>
+</body>
+<script src="js/jquery.min.js"></script>
+<script>
+
+ (function(e){
+    var position = 0;
+    var fade = 157;
+    var divSize = 0;
+    var children = null;
+    var currentChildren = null;
+    var cloneChildren = [];
+
+     e.prototype.shohan =function(){
+         var  i = this;
+
+         divSize = fade * this.children().length;
+         children = this.children();
+         i.append(children.clone());
+         i.append(children[0]);
+         setInterval(function(){
+             transformItem3D(i); 
+         },1000);
+         $("#prev").click(function(e) {
+            position += 157;
+            i.css({'transform':'translate3d(-'+position+'px,0px,0px)'});
+         });
+         $("#next").click(function(e) {
+             position =position - 157;
+             i.css({'transform':'translate3d(-'+position+'px,0px,0px)'});
+         });
+
+     };
+     function transformItem3D(item){
+          position += fade;
+          tempPos = (position / fade) - 1;
+          currentChildren  = item.children()[tempPos];
+          cloneChildren.push(currentChildren);
+          item.sort();
+          if((position / fade) > 0 ){
+           item.append(children[tempPos]);  
+          }else{
+            item.append(children[0])
+          }
+           item.removeClass(children[tempPos]);
+         
+         if(position >= divSize || position < 0){
+            fade = -fade;
+         }
+        //console.log(cloneChildren );
+         item.css({
+            'transform':'translate3d(-'+position+'px,0px,0px)'});
+     }
+ })($);
+ $(".shohan-stage").shohan();
+</script>
+</html>
