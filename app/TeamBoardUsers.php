@@ -14,6 +14,9 @@ class TeamBoardUsers extends Model
 	public function profile(){
 		return $this->hasOne('App\Profile','user_id','user_id');
 	}	
+	public function user(){
+		return $this->hasOne('App\User','id','user_id');
+	}
 	public function team_board(){
 		return $this->hasOne('App\TeamBoard','board_id','board_id');
 	}					

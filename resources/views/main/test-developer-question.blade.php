@@ -8,6 +8,9 @@
   padding: 10px;
   height: 500px;
 }
+.footer{
+  margin-top: 100px !important;
+}
 
 #quiz h1 {
   color: #FAFAFA;
@@ -93,6 +96,8 @@
   width: 100%;
   height: calc(100% - 44px);
   padding: 10px;
+  border-radius: 4px;
+  margin:0 auto 0 auto;
 }
 
 #quiz-results-message {
@@ -131,10 +136,14 @@
 #quiz_time{
   margin: 0 auto 0 auto;
 }
-
+#result{
+  background: #fff;
+  padding:10px;
+  box-shadow:0px 1px 2px rgba(0,0,0,0.2);
+}
 </style>
  {{--  Content Started --}}
-   <div class="card-layout-1" style="background: #eee;border:none;" id="quiz-show">
+   <div class="card-layout-1" style="background: #eee;border:none;margin:0 auto 0 auto;" id="quiz-show">
    	 <div id="quiz">
    	 <div id="quiz_time" data-timer="60"></div>
 	  <h2 id="quiz-name" style="color: #000;"></h2>
@@ -145,14 +154,16 @@
 	  <div id="quiz-results">
       <p id="quiz-results-message"></p>
 	    <p id="quiz-results-score"></p>
-	    <a id="quiz-retry-button" href="">Retry</a>
+	    <a id="quiz-retry-button" href="{{route('test-question-category')}}">Try Another test</a>
     </div>
   </div>
   
 
    </div>
     <div id="quiz-end">
-      <h1 id="result">Quiz Time Out Your score now </h1>
+      <div id="result">
+         Quiz Time Out Your score now 
+      </div>
     </div>
 @endsection
 @section('script')
@@ -341,11 +352,19 @@ Quiz.prototype.render = function(container) {
     results = score + '/' + self.questions.length;
 
     $('#quiz-results-score').html('You got <b>' + score + '/' + self.questions.length + '</b> questions correct.');
+    alert((score/self.questions.length)*100);
+    $.getJSON('{{route('api.question-score')}}',{
+      'title':'{{$title}}',
+      'score':Math.floor((score/self.questions.length)*100)
+    },function(result){
+      console.log(result);
+    })
     $('#quiz-results').slideDown();
     $('#submit-button').slideUp();
     $('#next-question-button').slideUp();
     $('#prev-question-button').slideUp();
     $('#quiz-retry-button').sideDown();
+
     
   });
   
@@ -442,7 +461,7 @@ Question.prototype.render = function(container) {
 // "Main method" which will create all the objects and render the Quiz.
 $(document).ready(function() {
   // Create an instance of the Quiz object
-  var quiz = new Quiz('{{"Sho"}}');
+  var quiz = new Quiz('{{ucfirst($title)}} question  given below');
   
   // Create Question objects from all_questions and add them to the Quiz object
   for (var i = 0; i < all_questions.length; i++) {
@@ -452,7 +471,10 @@ $(document).ready(function() {
     // Add the question to the instance of the Quiz object that we created previously
     quiz.add_question(question);
   }
-   $.getJSON('{{route('api.question-api')}}', result=>{ 
+   $.getJSON('{{route('api.question-api')}}',{
+    question_category_id:{{$id}}
+   },
+    function(result){ 
            //datas.push(result);
          $.each(result, function(i){
            quiz.add_question(new Question(result[i].question_string, result[i].choices.correct, result[i].choices.wrong));
@@ -469,11 +491,12 @@ $(document).ready(function() {
 $("#quiz-end").hide();
   $("#quiz_time").TimeCircles({count_past_zero: false}).addListener(function(unit,value,total){
     if(total == 0){
- 
-        
-       $("#result").text("Your score :"+finalscore);
-       $("#quiz-show").hide();
-       $("#quiz-end").show();
+      //alert(finalscore);
+        window.location = "{{route('test-question-category')}}";
+       // $("#result").html("<h1>Your score :"+finalscore+"</h1>");
+
+       // $("#quiz-show").hide();
+       // $("#quiz-end").show();
 
     }
   }) 

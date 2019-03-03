@@ -1,13 +1,12 @@
-
 <template>
 	<div style="margin-top:50px;margin-bottom:100px;position: fixed;width:100%;height:100%;z-index:999;">
 		<div class="board-header">
 			<h1 class="board-title">{{board_name}}</h1>
 			
-				<select class="ui fluid dropdown" style="width:300px;border-radius:4px;margin-top:9px;border:1px solid rgb(189, 174, 174);" @click="changeVisibility">
+				<select class="ui fluid dropdown" style="width:300px;border-radius:4px;margin-top:9px;border:1px solid rgb(189, 174, 174);" @click="changeVisibility" disabled>
 					<optgroup label="Change Visibility">
 					  <option>Public</option>
-					  <option>Private</option>	
+					  <option selected>Private</option>	
 					</optgroup>
 				</select>
 				<div class="search-user">
@@ -475,7 +474,7 @@ export default{
 		  	this.extra_ui.is_show_description = false;     
 		  },
 		  changeVisibility(){
-		  	alert('Hello');
+		  	//alert('Hello');
 		  },
 		  searchBoxToggle(){
 		  	var closeModal = $('.close');

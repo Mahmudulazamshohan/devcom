@@ -48472,7 +48472,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -48681,7 +48680,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 						this.extra_ui.is_show_description = false;
 				},
 				changeVisibility: function changeVisibility() {
-						alert('Hello');
+						//alert('Hello');
 				},
 				searchBoxToggle: function searchBoxToggle() {
 						var closeModal = $('.close');
@@ -48806,6 +48805,7 @@ var render = function() {
               "margin-top": "9px",
               border: "1px solid rgb(189, 174, 174)"
             },
+            attrs: { disabled: "" },
             on: { click: _vm.changeVisibility }
           },
           [_vm._m(0)]
@@ -49538,7 +49538,7 @@ var staticRenderFns = [
     return _c("optgroup", { attrs: { label: "Change Visibility" } }, [
       _c("option", [_vm._v("Public")]),
       _vm._v(" "),
-      _c("option", [_vm._v("Private")])
+      _c("option", { attrs: { selected: "" } }, [_vm._v("Private")])
     ])
   },
   function() {

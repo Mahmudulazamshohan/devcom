@@ -1,16 +1,15 @@
 @extends('layouts.main-2')
 @section('content')
 
-
- <div class="card-layout-1">
-    <div class="card">
-    	<h1><i class="fa fa-question-circle"></i>&ensp;Readiness Test </h1>
+ <div class="card-layout-1" style="margin:0 auto 0 auto;">
+    <div class="card" >
+    	<h1 style="color:#555;font-family: 'Roboto';"><i class="fa fa-question-circle"></i>&ensp;Readiness Test </h1>
     	<div class="ui grid mr">
     	@foreach($test_categories as $test_categorie)
 		  <div class="four wide column">
 		  	<div class="content-area">
 		    		<div class="content-header">
-		    			<a href="{{route('test-question',['id'=>$test_categorie->id])}}">
+		    			<a style="color:#fff;font-family: 'Roboto';font-weight: bold;text-transform: uppercase;"  href="{{route('test-question',['name'=>$test_categorie->id,'title'=>$test_categorie->name])}}">
 		    				<p>
 		    					<i class="fa fa-check"></i>
 		    				</p>
@@ -41,7 +40,7 @@
    	background: #242729;
    }
   .content{
-  	background: url('https://images.pexels.com/photos/169573/pexels-photo-169573.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+  	background: url('images/pexels-photo-169573.jpeg');
   	background-size: cover;
   	background-position: 100% 100%;
   	background-repeat: no-repeat;

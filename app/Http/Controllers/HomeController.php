@@ -11,6 +11,7 @@ use App\QuestionViews;
 use App\AnswerVote;
 use App\QuestionBookmark;
 use App\QuestionCategories;
+use Illuminate\Support\Facades\DB;
 class HomeController extends Controller
 {
     /**
@@ -43,7 +44,8 @@ class HomeController extends Controller
                               ->where('tags','like','%'.$tags.'%')
                               ->paginate(5);
 
-        $data['questions'] = collect($questions)->shuffle()->all(); 
+        $data['questions'] = collect($questions)->shuffle()
+                                                ->all(); 
         $data['questions'] =  $questions;
         $data['isMessage'] = true;
 
@@ -70,8 +72,25 @@ class HomeController extends Controller
                        'html_url'=>route('view-question',$question->id)
                      ];
         }
+        array_push($temp,[
+          'name'=>'More...',
+          'html_url'=>route('search-more',$r->q)
+        ]);
         $arr =['items'=>$temp];
         return response()->json($arr);
+    }
+    public function searchMore($q){
+       $questions = Question::orderByRaw('RAND()')
+                              ->where('title','like','%'.$q.'%')
+                              ->orWhere('tags','like','%'.$q.'%')
+                              ->paginate(5);
+
+        $data['questions'] = collect($questions)->shuffle()
+                                                ->all(); 
+        $data['questions'] =  $questions;
+        $data['isMessage'] = true;
+
+        return view('main.index',$data); 
     }
    public function viewQuestion($id){
           $question = Question::find($id);
@@ -116,18 +135,23 @@ class HomeController extends Controller
      public function ajaxVote(Request $r){
       $data = [];
       $result = [];
+      if($this->scoreAvailable()){
+        
+      }
       if(is_null(AnswerVote::where('user_id',Auth::id())->where('answer_id',$r->answer_id)->first())){
         if(Auth::check()){
           $data['user_id'] = Auth::id();
           $data['answer_id'] = $r->answer_id;
           $data['question_id'] = $r->question_id;
           $answer = AnswerVote::create($data);
-          $answer->vote +=1;
+          $answer->vote += 1;
           $answer->save();
           $result['error'] = false;
           $result['count'] = $answer->vote;
+          $result['message'] = '';
         }else{
           $result['error'] = true;
+           $result['message'] = 'Already answer this question';
         }
       }else{
         $result['error'] = true;
@@ -158,6 +182,32 @@ class HomeController extends Controller
      public function topUsers(){
       $data['isMessage'] = false;
       return view('main.top-users',$data);
+     }
+     public function mostAnswered(){
+      $data['isMessage'] = true;
+      $data['questions'] =  DB::select('SELECT users.name,profiles.profile_image,answers.question_id,questions.title,questions.created_at,questions.tags
+               FROM (SELECT COUNT(id) as counts,answer_votes.* 
+               FROM `answer_votes` GROUP by question_id) as answers 
+               INNER JOIN users ON answers.user_id = users.id 
+               INNER JOIN profiles On users.id = profiles.user_id
+               INNER JOIN questions ON answers.question_id = questions.id
+               ORDER BY counts DESC');
+    
+      return view('main.user-answers',$data);
+     }
+     public function mostVisited(){
+      $data['isMessage'] = true;
+      $data['questions'] =  DB::select('SELECT users.name,profiles.profile_image,answers.question_id,questions.title,questions.created_at,questions.tags
+               FROM (SELECT COUNT(id) as counts,question_views.* 
+               FROM `question_views` GROUP by question_id) as answers 
+               INNER JOIN users ON answers.user_id = users.id 
+               INNER JOIN profiles On users.id = profiles.user_id
+               INNER JOIN questions ON answers.question_id = questions.id
+               ORDER BY counts DESC');
+      return view('main.most-visited',$data);
+     }
+     public function scoreAvailable(){
+
      }
 
     

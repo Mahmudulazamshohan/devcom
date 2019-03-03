@@ -1,14 +1,50 @@
 @php
   use App\QuestionBookmark;
-  $bookmarks = QuestionBookmark::limit(5)->orderBy('id','desc')->get(); 
   use App\Notification;
+  use App\ContentInterested;
+  use App\Question;
 
+
+  $bookmarks = null;
+  if(Auth::check()){
+  $bookmarks = QuestionBookmark::where('user_id',Auth::id())->limit(5)
+     ->orderBy('id','desc')
+     ->get();  
+  }
+  
 
   if(Auth::check()){
     $total = Notification::where('user_id',Auth::id())
                          ->where('view_status',0)
                          ->count(); 
   }
+  $hotNetworks = null;
+  $contentInterested  =null;
+  if(Auth::check()){
+    $technos = [];
+    
+
+    //Object
+    $contentInterested = ContentInterested::where('user_id',Auth::id())->first();
+
+    if($contentInterested){
+      $technos = explode(',',$contentInterested->question_categories_as_text);
+      $hotNetworks = Question::where('tags','like',"%$technos[0]%");
+
+      foreach ($technos as $t) {
+         $hotNetworks->orWhere('tags','like',"%$t%");
+      }
+       $hotNetworks = $hotNetworks->inRandomOrder()->get();
+
+
+    }
+  }
+
+  if(is_null($hotNetworks)){
+    $hotNetworks = Question::inRandomOrder()->limit(10)->get();
+  }
+    //dd($hotNetworks);
+
   
 @endphp
 <!DOCTYPE html>
@@ -131,9 +167,11 @@
   
    <div class="bg_item">
      <div class="align-btn">
+      @guest
        <a href="{{route('register')}}" class="ui primary button" style="background: #3AC0FF;margin-left: 230px;padding: 12px;">
          Create A New Account
        </a>
+       @endguest
      </div>
     
    </div>
@@ -159,16 +197,16 @@
     <div class="header">Community</div>
     <div class="menu">
       <a class="item" href="{{route('tagsshow')}}"><i class="fa fa-tag"></i> Tags</a>
-      <a class="item" href="{{route('users')}}"><i class="fa fa-user"></i> Users</a>
-      <a class="item" href="{{route('top-users')}}"><i class="fa fa-star"></i> Top</a>
+     {{--  <a class="item" href="{{route('users')}}"><i class="fa fa-user"></i> Users</a>
+      <a class="item" href="{{route('top-users')}}"><i class="fa fa-star"></i> Top</a> --}}
     </div>
   </div>
   
   <div class="item">
     <div class="header">Support</div>
     <div class="menu">
-      <a class="item">E-mail Support</a>
-      <a class="item">FAQs</a>
+      <a class="item" href="{{route('email-support')}}">E-mail Support</a>
+      <a class="item" href="{{route('faqs')}}">FAQs</a>
     </div>
   </div>
   @auth
@@ -205,24 +243,54 @@
           </div>
           @endforeach
         @else
-         <h4 style="text-align: center;color:#555;font-family: 'Roboto';">Not Found</h4>
+         <h5 style="text-align: center;color:#fff;font-family: 'Roboto';background: #444;border-radius: 5px; ">Not Found</h5>
+        @endif
+        @if(!is_null($bookmarks))
+        <a href="{{route('extend-bookmarks')}}" style="background: rgb(58, 192, 255);padding:0px 4px 0px 4px ;border-radius: 3px;
+        width:40px;color: #fff;margin-top:5px;margin-left:5px;">more</a>
         @endif
 
       </div>
       <p class="net-text">Hot Network Question</p>
       <div class="network-categories">
-        @for($i=0;$i<10;$i++)
+        @foreach($hotNetworks as $h)
         <div class="network-items">
-          @if($i%2 == 0)
-          <img src="{{asset('images/js-feed.jpeg')}}">
-          <a href=""><p>Artificial Intelligence</p></a>
-          @else
-           <img src="{{asset('images/no-sql.jpeg')}}">
-           <a href=""><p>No Sql</p></a>
-          @endif
+          
+          
+           
+           @if($t = explode(',',$h->tags)[0])
+          
+             @if(file_exists(public_path('icons/'.$t.'.png')))
+               <img src="{{asset('icons/'.$t.'.png')}}">
+             @else
+               <img src="{{ asset('icons/images.jpg') }}">
+             @endif
+             
+            @else
+              <img src="https://i.stack.imgur.com/ez2Mg.png">
+            @endif
+            <a href="">{{$h->title}}</a>
+          
           
         </div>
-        @endfor
+        @endforeach
+      </div>
+      <div>
+        
+        @auth
+        <p class="watch-text">
+          <i class="fa fa-eye"></i> Watched Tags
+        </p>
+        <select multiple="" class="ui search fluid dropdown">
+        @if(!is_null($contentInterested))
+          @foreach(explode(',',$contentInterested->question_categories_as_text) as $ci)
+          <option selected>{{ucfirst($ci)}}</option>
+          @endforeach
+        @endif
+        </select>
+        @else
+         
+        @endauth
       </div>
     </div>
    
@@ -249,9 +317,15 @@
         <div class="item">
           <ul>
 
-            <li>Teams</li>
-            <li>About</li>
-            <li>Privacy Policy</li>
+             <li >
+              <a href="{{route('team.home')}}" style="color: white;">Teams</a>
+            </li>
+            <li >
+              <a href="{{route('notifications')}}" style="color: white;margin-left: 4px;">Notifications</a>
+            </li>
+            <li >
+              <a href="{{route('achievements')}}" style="color: white;margin-left: 4px;">Achievements</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -260,9 +334,15 @@
       <div class="ui list" style="padding: 10px !important;margin-top:10px;">
         <div class="item">
           <ul>
-            <li>Teams</li>
-            <li>Jobs</li>
-            <li>Helps</li>
+            <li >
+              <a href="" style="color: white;">Links</a>
+            </li>
+            <li >
+              <a href="" style="color: white;">Facebook</a>
+            </li>
+            <li >
+              <a href="" style="color: white;">Google Plus</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -270,11 +350,7 @@
     <div class="items">
       <div class="ui list" style="padding: 10px !important;margin-top:10px;">
         <div class="item">
-          <ul>
-            <li>Questions</li>
-            <li>Jobs</li>
-            <li>Helps</li>
-          </ul>
+          
         </div>
       </div>
     </div>
@@ -313,6 +389,13 @@
         return response;
       }
     }});
+
+  $('.ui.dropdown').dropdown({
+    allowAdditions: true,
+     onChange: function(value, text, $selectedItem) {
+           $('#original_tags').val(value);
+    }
+  });
 </script>
 
 </html>

@@ -12,7 +12,7 @@ class Answer extends Model
                           'question_text',
                           'date','month'];
     public function question(){
-    	return $this->hasOne('App\Question','question_id','id');
+    	return $this->hasOne('App\Question','id','question_id');
     }  
     public function profile(){
     	return $this->hasOne('App\Profile','user_id','user_id');

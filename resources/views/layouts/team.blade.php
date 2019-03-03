@@ -1,4 +1,13 @@
-
+@php
+ use App\Notification;
+  $total = 0;
+  if(Auth::check()){
+    $total = Notification::where('user_id',Auth::id())
+                         ->where('view_status',0)
+                         ->count(); 
+  }
+  
+@endphp
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,14 +15,14 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-
+  
   <title>DevCom | Community system for developers</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <link rel="stylesheet" type="text/css" href="{{ asset('styles/bundle.css') }}">
   <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/components/icon.min.css'>
   <link href="https://fonts.googleapis.com/css?family=Quattrocento|Ceviche+One|Lakki+Reddy|Merienda|Shrikhand|Roboto|Josefin+Sans|Unlock" rel="stylesheet">
- 
+
   <link rel="stylesheet" href="{{ asset('styles/style.css') }}">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-lite.css" rel="stylesheet">
 
@@ -33,9 +42,11 @@
      <i class="clipboard icon"></i>  Boards
     </a>
    
-  <a class="item" id="notification" data-html="<h1>a</h1>">
+  <a class="item" id="notification" href="{{route('notifications')}}">
     <i class="bell icon"></i> Notification
-    <div class="floating ui green label" style="margin-top: 8px !important;">1</div>
+    <div class="floating ui green label" style="margin-top: 8px !important;">
+      {{$total}}
+    </div>
  
   </a>
  
@@ -59,15 +70,15 @@
     <a class="item" style="color:#000 !important">
       <i class="plus icon" id="board_press"></i>PERSONAL BOARDS
       <div id="board_show">
-      	<ul style="list-style-type: none;">
-      		<li>1</li>
-      		<li>2</li>
-      		<li>3</li>
-      	</ul>
+      	<div style="display: flex;flex-direction: column;">
+      		 @foreach($teamBoardUsers as $teamBoardUser)
+              <a href="{{route('team.board',[$teamBoardUser->board_id,$teamBoardUser->team_board->board_title])}}" class="item" style="color: #fff;background:rgb(33, 186, 69);margin-bottom: 4px;border-radius: 4px !important;font-weight: bold;">{{$teamBoardUser->team_board->board_title}}</a>
+           @endforeach
+        </div>
       </div>
     </a>
     
-    <a class="item" style="color:#000 !important" id="create_new_board">
+    <a href="{{route('team.add-board')}}" class="item" style="color:#000 !important" id="create_new_board">
       Create New Board
     </a>
   </div>
@@ -99,8 +110,8 @@
   <div class="flex-row" style="display: flex;flex-flow: row;">
     <div class="flex-sidebar" style="flex-grow: 1;">
       <div class="sidebar-ui">
-        <a href=""><i class="fa fa-dashboard"></i> Boards</a>
-        <a href=""><i class="fa fa-home"></i> Home</a>
+       
+        <a href="{{route('team.home')}}"><i class="fa fa-home"></i> Home</a>
       </div>
     </div>
     <div class="flex-body"  style="flex-grow: 3;padding-top: 50px;">

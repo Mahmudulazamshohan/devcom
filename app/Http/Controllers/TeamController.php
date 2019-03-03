@@ -12,6 +12,7 @@ use App\User;
 use App\CardComment;
 use App\RecentyViewed;
 use App\Notification;
+
 class TeamController extends Controller
 {
 
@@ -54,7 +55,9 @@ class TeamController extends Controller
     	}
     }
     public function addBoard(){
-    	return view('team.add-board');
+         $data['teamBoardUsers'] = TeamBoardUsers::where('user_id',Auth::id())
+                                        ->get(); 
+    	return view('team.add-board',$data);
     }
     public function storeBoard(Request $r){
     	$this->validate($r,[
@@ -383,8 +386,10 @@ class TeamController extends Controller
                          ]);
         return response()->json(['success'=>$boardList]);
     }
-    public function members(){
-        return view('team.members');
+    public function members($id){
+        $data['members'] = TeamBoardUsers::where('board_id',$id)->get();
+        //dd($data);
+        return view('team.members',$data);
     }
 }
 

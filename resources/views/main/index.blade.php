@@ -22,9 +22,9 @@
 @extends('layouts.main')
 @section('content')
     <div class="d-flex-1">
-      <a href="">Recent Questions</a>
+      <a href="{{route('home')}}" style="border-bottom: 2px solid rgb(58, 192, 255);">Recent Questions</a>
       <a href="{{route('most-answered')}}">Most Answered</a>
-      <a href="">Most Visited</a>
+      <a href="{{route('most-visited')}}">Most Visited</a>
     </div>
  {{--  Content Started --}}
       <!-- Card End -->
@@ -67,12 +67,12 @@
            <div class="question">
               <div class="flex-questions">
                   <div class="flex-questions-item">
-                    <a href="{{route('view-question',$question->id)}}">{{substr($question->title,0,100)}}@if(strlen($question->title)>=100).......@endif</a>
+                    <a href="{{route('view-question',$question->id)}}">{{$question->title}}@if(strlen($question->title)>=1000).......@endif</a>
                     <div class="tag-container">
                      @foreach(explode(',', $question->tags) as $tag)
-                         <a href="{{ route('tags',$tag) }}" class="btn-custom-tags">{{ ucfirst($tag) }}</a>
+                       <a href="{{ route('tags',$tag) }}" class="btn-custom-tags">{{ ucfirst($tag) }}</a> 
                      @endforeach
-                   
+                    
                   </div>
                   </div>
                   <div class="flex-questions-item">
@@ -150,14 +150,7 @@
          <a onclick="fbshareCurrentPage()" target="_blank" style="background: #4267B2;border-radius: 3px;padding: 4px;color:#fff;">
           <i class="fa fa-facebook" style="background: #fff;padding: 3px;border-radius:2px;color: #4267B2;"></i> Share</a>
        </div>
-       <div class="social-content">
-          <a onclick="fbshareCurrentPage()" target="_blank" style="background: #4267B2;border-radius: 3px;padding: 4px;color:#fff;">
-          <i class="fa fa-facebook" style="background: #fff;padding: 3px;border-radius:2px;color: #4267B2;"></i> Share</a>
-       </div>
-       <div class="social-content">
-          <a onclick="fbshareCurrentPage()" target="_blank" style="background: #4267B2;border-radius: 3px;padding: 4px;color:#fff;">
-          <i class="fa fa-facebook" style="background: #fff;padding: 3px;border-radius:2px;color: #4267B2;"></i> Share</a>
-       </div>
+      
      </div>
    </div>
 </div>

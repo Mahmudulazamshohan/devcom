@@ -38,11 +38,11 @@
 @section('content')
    <div class="d-flex-1">
       <a href="{{route('home')}}">Recent Questions</a>
-      <a href="{{route('most-answered')}}" style="border-bottom: 2px solid rgb(58, 192, 255);">Most Answered</a>
-      <a href="">Most Visited</a>
+      <a href="{{route('most-answered')}}" >Most Answered</a>
+      <a href="{{route('most-visited')}}" style="border-bottom: 2px solid rgb(58, 192, 255);">Most Visited</a>
     </div>
    <div class="card-layout">
-      <h2 style="border-bottom: 1px dashed #ccc;padding-bottom: 10px;padding-left:30px;color: #555;font-family: 'Times New Roman';"><i class="fa fa-question-circle"></i> Most Answered Question </h2>
+      <h2 style="border-bottom: 1px dashed #ccc;padding-bottom: 10px;padding-left:30px;color: #555;font-family: 'Times New Roman';"><i class="fa fa-question-circle"></i> Most Visited Question </h2>
        @foreach($questions as $question)
       <!-- Card Started -->
       

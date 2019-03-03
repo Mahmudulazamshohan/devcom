@@ -150,7 +150,7 @@
    .card-layout{
        display: flex;
        flex-flow: column;
-       min-width: 750px;
+       min-width: 780px;
        border-bottom:1px solid #ccc;
        padding: 10px;
        background: #fff;
@@ -273,6 +273,16 @@
   font-weight: bold;
   margin-top: 10px;
 }
+.watch-text{
+  margin-top:10px;
+  background: #666666;
+  color: #fff;
+  padding: 5px;
+  border-radius: 4px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: bold;
+  margin-top: 10px;
+}
 .feed-text{
   font-size: 18px;
   font-family: 'Unlock';
@@ -307,15 +317,17 @@
  .card-layout-1{
        display: flex;
        flex-flow: column;
-       min-width: 750px;
-       max-width: 910px;
-       border:1px solid #ccc;
+       min-width: 810px;
+       max-width: 810px;
+       border:1px solid #eee;
        padding: 50px 50px 150px 60px;
        background: #fff;
        border-radius: 4px;
        margin-bottom: 4px;
        min-height: 100%;
        margin-top:4px;
+       margin-left:4px;
+       margin-right:4px;
 
    }
    .card-layout-2{
@@ -373,6 +385,9 @@
     flex-grow: 1;
     width: 50%;
     height: 100px;
+  }
+  .flex-questions-item a{
+    word-break: break-all;
   }
   ul.pagination{
     display: flex;
@@ -520,6 +535,10 @@
      }
     #question_show{
       padding: 3px 12px 7px 1px;
+      font-size:22px;
+      font-weight: bold;
+      color:#555;
+      font-family: "Roboto";
     }
   #question_show pre{
     overflow: hidden;
@@ -734,3 +753,40 @@
  .notification:active{
   background: #fff !important;
  }
+ .email-h1{
+  color: rgb(102, 102, 102);
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  text-align: center;
+
+ }
+.email-h1:after {
+    display: inline-block;
+    margin: 0 0 8px 20px;
+    height: 3px;
+    content: " ";
+    text-shadow: none;
+    background-color: rgb(58, 192, 255);
+    width: 140px;
+}
+.email-h1:before {
+    display: inline-block;
+    margin: 0 20px 8px 0;
+    height: 3px;
+    content: " ";
+    text-shadow: none;
+    background-color: rgb(58, 192, 255);
+    width: 140px;
+}
+.form-box-email{
+  padding: 30px;
+  border:1px solid rgba(238, 238, 238,0.3);
+  border-radius: 4px;
+  background: #eee;
+}
+.ls-br{
+  border-bottom: 1px solid #ccc !important;
+}
+.ls-br:last-child{
+  border-bottom:none !important;
+}

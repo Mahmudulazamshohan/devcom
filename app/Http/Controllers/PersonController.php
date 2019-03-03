@@ -2,27 +2,39 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-
+use App\TestQuestion;
+use App\TestScore;
+use Auth;
 class PersonController extends Controller
 {
 
 	public function __construct(){
-      // $this->middleware('auth');
+       $this->middleware('auth');
 	}
-	public function questionApi(){
+	public function questionApi(Request $r){
 		$data = [];
-		
-		for($i=0;$i<=10;$i++){
+		$testQuestions = TestQuestion::where('question_category_id',$r->question_category_id)->get();
+		foreach($testQuestions as $t){
+
 			$items = [
-			  'question_string'=> "What color is the shohan?".$i,
+			  'question_string'=> $t->question_string,
 			  'choices'=> [
-			    'correct'=>"Blue",
-			    'wrong'=>["Pink", "Orange", "Green"]
+			    'correct'=>$t->correct,
+			    'wrong'=>explode(',',$t->wrong)
 			  ]
 			];
 		   array_push($data,$items);
 		}
+		//shuffle($data);
 		return response()->json($data);
+	}
+	public function storeScore(Request $r){
+		$t = TestScore::create([
+				'user_id'=>Auth::id(),
+				'title'=>$r->title,
+				'score'=>$r->score,
+			]);
+		return  response()->json($t);
 	}
 
 }

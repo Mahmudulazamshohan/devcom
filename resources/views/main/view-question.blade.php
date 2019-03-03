@@ -4,8 +4,12 @@
 
    <div class="card-layout-1">
     <div style="display: flex;flex-direction: row;">
-      <div style="flex-grow:5;">
-          <h1 id="question_show" >{{$question->title}}{{$question->title}}</h1>
+      <div style="flex-grow:5;display: flex;flex-direction: row;">
+         
+          <p id="question_show" >
+            
+            {{$question->title}}</p>
+
       </div>
     @php
           $imageLocation = null;
@@ -22,22 +26,24 @@
         @if(!is_null($question->profile))
            <a href="{{$question->profile->profile_image}}">
             <img src="{{route('view-image',[$imageLocation,100,100])}}" alt="" width="50" height="50" style="border-radius: 50%;border:2px solid #ccc;">
-            <p>{{$question->user->name}}</p>
+            <p style="text-align: center;word-break: break-all;">{{$question->user->name}}</p>
           </a>
         @else
            <img src="{{asset('images/user-blank.png')}}" id="showable_image" style="border-radius: 50%;border:2px solid #ccc;">
         @endif
      <div style="flex-grow:1;">
-      
+       
      </div> 
     </div>
-   	
+   	 
    	<div class="ui divider"></div>
-   	  <?=$question->description?>
+   	  <div style='font-family: Arial,"Helvetica Neue",Helvetica,sans-serif'>
+        <?=$question->description?> 
+      </div>
       @if($totalanswer == 0)
-   	   <h1>No Answer</h1>
+   	   <h2>No Answer</h2>
       @else
-       <h1>{{$totalanswer}} Answers</h1>
+       <h2 style="font-family: 'Roboto';color: #555;">{{$totalanswer}} Answers</h2>
       @endif
    	  
    	  <div class="ui divider"></div>
@@ -77,7 +83,27 @@
        </div>
         <div class="ui divider"></div>
       @endforeach
-      <h1>Your answer</h1>
+      @if(session()->has('type'))
+      @if(session()->get('type') == 'danger')
+      
+      <div class="ui negative message">
+        <i class="close icon"></i>
+        <div class="header">
+           {{session()->get('message')}}
+        </div>
+       </div>
+
+      @endif
+      @if(session()->get('type') == 'success')
+      <div class="ui positive message">
+        <i class="close icon"></i>
+        <div class="header">
+           {{session()->get('message')}}
+        </div>
+      </div>
+      @endif
+      @endif
+      <h2 style="font-family: 'Roboto';color:#555;border-bottom:1px solid rgb(155, 191, 227);padding-bottom: 10px;">Your answer</h2>
    	  <div id="summernote">	
 	    </div>
        
@@ -108,6 +134,10 @@
 <script src="{{ asset('js/summernote-lite.js') }}" defer></script>
 
   <script type="text/javascript" defer>
+    $('.close.icon').click(function() {
+   $(this).parent().hide();
+   
+  });
     var isUpAngleHit = false;
     var isDownAngleHit = false;
     $('.upangle').click(function(event) {

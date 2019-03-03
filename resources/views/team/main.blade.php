@@ -8,7 +8,7 @@
       {{$recenty_view->team_board->board_title}}
     </a>
     <div style="margin-top:10px;">
-       <a class="ui button small olive"><i class="fa fa-user"></i> Members</a>  
+       <a class="ui button small olive" href="{{route('team.members',$recenty_view->board_id)}}"><i class="fa fa-user"></i> Members</a>  
         <a class="ui button small grey"> <i class="fa fa-dashboard"></i></a>
     </div>
     
@@ -25,8 +25,11 @@
       {{$teamBoardUser->team_board->board_title}}
     </a>
     <div style="margin-top:10px;">
-       <a class="ui button small olive"><i class="fa fa-user"></i> Members</a>  
-        <a class="ui button small grey"> <i class="fa fa-dashboard"></i></a>
+       <a class="ui button small olive" href="{{route('team.members',$teamBoardUser->board_id)}}">
+        <i class="fa fa-user"></i> Members</a>  
+        <a href="{{route('team.board',[$teamBoardUser->board_id,$teamBoardUser->team_board->board_title])}}" class="ui button small grey"> 
+          <i class="fa fa-dashboard"></i>
+        </a>
     </div>
     
   </div>
