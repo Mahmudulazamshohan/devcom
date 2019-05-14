@@ -6,7 +6,7 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 <a href="https://semantic-ui.com/">
-<img src="https://semantic-ui.com/images/logo.png" alt="License" width="20" height="20">Semantic UI
+<img src="https://semantic-ui.com/images/logo.png" alt="License" width="20" height="20"><b>Semantic UI</b>
 </a>
 </p>
 
