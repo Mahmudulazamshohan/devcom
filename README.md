@@ -16,12 +16,27 @@ Admin Dashboard
 </h2>
 <img src="a (1).jpg">
 <h2 align="left">
-All Stock Invoice
+User Home
 </h2>
-<img src="a3.jpg">
+<img src="a (1).png">
 <h2 align="left">
-Add Customer Information
+Admin Panel
 </h2>
-<img src="a2.jpg">
+<img src="a (2).jpg">
 
-
+<h2 align="left">
+User Question
+</h2>
+<img src="a (3).jpg">
+<h2 align="left">
+Edit Question
+</h2>
+<img src="a (4).jpg">
+<h2 align="left">
+User Asked Questions
+</h2>
+<img src="a (5).jpg">
+<h2 align="left">
+User Can ask Question
+</h2>
+<img src="a (6).jpg">
